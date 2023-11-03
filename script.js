@@ -1,27 +1,29 @@
+const apiUrl =
+	'https://fsa-crud-2aa9294fe819.herokuapp.com/api/2308-ACC-PT-WEB-PT-A/events'
+
 const mainDiv = document.querySelector('#main-content')
 
-fetchData()
+init()
 
-const formatDate = (date) => {
-	const d = new Intl.DateTimeFormat('en-US', {
-		dateStyle: 'full',
-		timeStyle: 'short',
-	}).format(new Date(date))
-	return d
+async function init() {
+	try {
+		const response = await fetch(apiUrl)
+		const data = await response.json()
+		console.log(data)
+		data.data.forEach((event) => {
+			renderData(event)
+		})
+	} catch (error) {
+		console.log(error)
+	}
 }
 
-async function fetchData() {
-	const response = await fetch(
-		'https://fsa-crud-2aa9294fe819.herokuapp.com/api/2023-ACC-PT-WEB-PT-A/events'
-	)
-	const data = await response.json()
-	const result = data.data
-	result.forEach((data) => {
-		const card = document.createElement('li')
-		card.classList.add('relative', 'bg-gray-800', 'rounded-2xl')
-		card.id = data.id
-		card.dataset.cohortId = data.cohortId
-		card.innerHTML = `
+const renderData = (data) => {
+	const card = document.createElement('li')
+	card.classList.add('relative', 'bg-gray-800', 'rounded-2xl')
+	card.id = data.id
+	card.dataset.cohortId = data.cohortId
+	card.innerHTML = `
                         <div class="absolute p-2 text-sm text-white bg-red-300 rounded-lg hover:bg-red-500 right-2 top-2" id="delete-event" onclick="">
                            <button type="button" onclick="deleteEvent(${
 															data.id
@@ -53,22 +55,90 @@ async function fetchData() {
 						</div>
             `
 
-		mainDiv.appendChild(card)
-	})
+	mainDiv.appendChild(card)
+}
+// Function to format date
+const formatDate = (date) => {
+	const d = new Intl.DateTimeFormat('en-US', {
+		dateStyle: 'full',
+		timeStyle: 'short',
+	}).format(new Date(date))
+	return d
 }
 
+//Delete Event
+
 window.deleteEvent = async (id) => {
-	console.log(id)
-	const response = await fetch(
-		`https://fsa-crud-2aa9294fe819.herokuapp.com/api/2023-ACC-PT-WEB-PT-A/events/${id}`,
-		{
-			method: 'DELETE',
-		}
-	)
+	const response = await fetch(`${apiUrl}/${id}`, {
+		method: 'DELETE',
+	})
 	console.log(response)
 	// delete the card from the DOM after the fetch request is successful (status code 204)
 	if (response.status === 204) {
 		const card = document.getElementById(id)
-		card.remove()
+		card.classList.add('animate_fadeOut')
+		setTimeout(() => {
+			card.remove()
+		}, 1000)
+	} else {
+		alert('Something went wrong!')
+	}
+}
+
+// Event Submission Form modal
+
+const dialog = document.querySelector('#createEventFormModal')
+const openModalButton = document.querySelector('#openModalButton')
+const submitButton = document.querySelector('#submitButton')
+
+openModalButton.addEventListener('click', () => {
+	dialog.showModal()
+})
+
+submitButton.addEventListener('click', () => {
+	createEvent()
+})
+
+// Create Event
+const createEvent = async () => {
+	let name = document.querySelector('#name').value
+	let description = document.querySelector('#description').value
+	let date = document.querySelector('#dateTimePicker').value
+	let location = document.querySelector('#location').value
+	date = new Date(date).toISOString()
+
+	const newEvent = {
+		name,
+		description,
+		date,
+		location,
+	}
+	try {
+		const response = await fetch(apiUrl, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(newEvent),
+		})
+		const data = await response.json()
+		console.log(data)
+		dialog.close()
+		renderData(data.data)
+	} catch (error) {
+		console.log(error)
+	}
+}
+
+async function deleteAllEvents() {
+	try {
+		const response = await fetch(apiUrl)
+		const data = await response.json()
+		console.log(data)
+		data.data.forEach((event) => {
+			deleteEvent(event.id)
+		})
+	} catch (error) {
+		console.log(error)
 	}
 }

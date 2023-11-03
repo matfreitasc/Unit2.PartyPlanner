@@ -17,18 +17,87 @@
 		class="flex flex-col items-center w-screen h-screen gap-6 text-white bg-gray-900">
 		<header class="mt-4">
 			<h1 class="text-6xl text-center text-white">Party Planner</h1>
-			<nav>
-				
-			</nav>
+			<nav></nav>
 		</header>
-		<main class="py-24 sm:py-32">
+		<main class="relative flex flex-col items-center py-24 sm:py-32">
+			<div class="">
+				<button
+					id="openModalButton"
+					type="button"
+					class="px-4 py-2 text-white bg-green-500 rounded hover:bg-green-600">
+					Create a new event!
+				</button>
+			</div>
 			<div class="px-6 mx-auto max-w-7xl lg:px-8">
 				<ul
-                    id="main-content"
+					id="main-content"
 					role="list"
-					class="grid max-w-2xl grid-cols-1 mx-auto mt-20 gap-x-8 gap-y-16 sm:grid-cols-2 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-				</ul>
+					class="grid max-w-2xl grid-cols-1 mx-auto mt-20 gap-x-8 gap-y-16 sm:grid-cols-2 lg:mx-0 lg:max-w-none lg:grid-cols-3"></ul>
 			</div>
 		</main>
+		<dialog
+			class="absolute left-0 right-0 w-2/4 mx-auto mt-[10%] bg-white rounded-2xl h-2/4 text-gray-700"
+			id="createEventFormModal">
+			<div class="flex flex-col items-center w-full h-full gap-2 p-4 ">
+				<h2 class="text-2xl">Create a new event</h2>
+				<form
+					method="dialog"
+					id="newEventForm"
+					class="flex flex-col w-full h-full gap-10 justify-evenly">
+					<div class="relative">
+						<label
+							for="name"
+							class="absolute inline-block px-1 text-xs font-medium text-gray-900 bg-white -top-2 left-2"
+							>Event Name</label
+						>
+						<input
+							type="text"
+							name="name"
+							id="name"
+							class="block w-full rounded-md border-0 py-1.5 px-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+							placeholder="Tomorrow Land" />
+					</div>
+					<div class="relative">
+						<label
+							for="description"
+							class="absolute inline-block px-1 text-xs font-medium text-gray-900 bg-white -top-2 left-2"
+							>Event Description</label
+						>
+						<textarea
+							rows="4"
+							name="description"
+							id="description"
+							class="block w-full rounded-md border-0 py-1.5 px-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"></textarea>
+					</div>
+					<div class="relative">
+						<label
+							for="dateTimePicker"
+							class="absolute inline-block px-1 text-xs font-medium text-gray-900 bg-white -top-2 left-2"
+							>Event Date & Time</label
+						>
+						<input
+							type="datetime-local"
+							id="dateTimePicker"
+							name="dateTimePicker"
+                            required
+							class="block w-full rounded-md border-0 py-1.5 px-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+					</div>
+					<div class="relative">
+						<label
+							for="location"
+							class="absolute inline-block px-1 text-xs font-medium text-gray-900 bg-white -top-2 left-2"
+							>Event Location</label
+						>
+						<input
+							type="text"
+							name="location"
+							id="location"
+							class="block w-full rounded-md border-0 py-1.5 px-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+							placeholder="Nevada" />
+					</div>
+					<button type="button" id="submitButton" class="px-10 py-2 mx-auto bg-gray-100 rounded-lg">Submit</button>
+				</form>
+			</div>
+		</dialog>
 	</body>
 </html>
